@@ -4,7 +4,7 @@ const CONFIRMATION_INTERVAL_MS = 20 * 1000;
 
 async function createTransactionPromise(flexEther, txHashPromise) {
     
-    const confirmed = async function(minConfirmations=0) {
+    const confirmed = async function(minConfirmations=3) {
         const txHash = await txHashPromise;
         while (true) {
             const [
