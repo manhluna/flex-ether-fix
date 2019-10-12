@@ -42,13 +42,13 @@ let gas = eth.estimateGas('0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', '100',
 ```
 
 ## User Guide
-- [Creating an instance](creating-an-instance)
-- [Sending ether](#sending-ether)
-- [Transaction promises](#transaction-promises)
-- [Getting balances](#getting-balances)
-- [Estimating gas](#estimating-gas)
-- [ENS addresses](#ens-addresses)
-- [Instance Properties](#instance-properties)
+- Creating an instance
+- Sending ether
+- Transaction promises
+- Getting balances
+- Estimating gas
+- ENS addresses
+- Instance Properties
 
 ### Creating an instance
 By default, the instance will create an [Infura](https://infura.io) provider to
