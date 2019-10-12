@@ -17,7 +17,7 @@ module.exports = class FlexEther {
 		if (!this.provider) {
 			this.provider = cw3p({
 				uri: opts.providerURI,
-				//net: opts.net
+				net: opts.net
 			});
 		}
 		this.rpc = new RpcClient(this.provider);
