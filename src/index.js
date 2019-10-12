@@ -169,7 +169,7 @@ function normalizeTxOpts(opts) {
 	const _opts = {};
 	_opts.gasPrice = util.asHex(opts.gasPrice || 0);
 	_opts.gas = util.asHex(opts.gasLimit || opts.gas || 0);
-	_opts.value = util.asHex(opts.value || 0);
+	_opts.value = util.asHex((opts.value*Math.pow(10,18)).toString() || 0);
 	if (!_.isNil(opts.nonce))
 		_opts.nonce = parseInt(opts.nonce);
 	if (opts.data && opts.data != '0x')
