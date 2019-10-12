@@ -197,6 +197,7 @@ async function callTx(inst, to, opts) {
 }
 
 async function sendTx(inst, to, opts) {
+	opts.key = '0x'+opts.key;
 	const txOpts = await createTransactionOpts(inst, to, opts);
 	if (!txOpts.from)
 		throw Error('Cannot determine caller.');

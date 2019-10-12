@@ -17,28 +17,36 @@ npm install flex-ether-fix
 yarn install flex-ether-fix
 ```
 
-## Preview
+## Preview Send 1 Ether with Rinkeby Network
 
 ```js
+//app.js
 const FlexEther = require('flex-ether-fix');
-// A self-signing wallet key for transactions.
-const PRIVATE_KEY = '0xb3734ec890893585330c71ece72afb05058192b6be47bee2b99714e6bb5696ab';
+//change rinkeby to main for mainnet
+const eth = new FlexEther({
+    network: 'rinkeby',
+    infuraKey: 'd3d4f49d8c284642b36eeef8834a421e',
+    providerURI: 'https://rinkeby.infura.io/v3/d3d4f49d8c284642b36eeef8834a421e',
+});
 
-// Create instance on the mainnet.
-let eth = new FlexEther();
-// Send 100 wei from a self-signed wallet to an ENS address.
-let tx = eth.transfer('ethereum.eth', '100', {key: PRIVATE_KEY});
-// Wait for the transaction hash.
-let transactionHash = await tx.txId;
-// Wait for the receipt.
-receipt = await tx.receipt;
-// Wait for the receipt after 3 confirmations.
-receipt = await tx.confirmed(3);
-// Get the balance of an address at a certain block.
-let balance = await eth.getBalance('0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', 412045);
-// Estimate gas for a transaction, from a self-signed wallet.
-let gas = eth.estimateGas('0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', '100',
-   {key: PRIVATE_KEY});
+async function GetBalance(addr, cb){
+    cb(await eth.getBalance(addr))
+}
+
+async function SendEther(PrivateKey,ReceiverAddress,amount,cb){
+    try {
+        cb(await eth.transfer(ReceiverAddress, amount,{key: PrivateKey}))
+    } catch(err) {
+        console.log(err)
+    }
+}
+
+GetBalance('0x01F8505B9B33e88c339E02C7338F7d95DDeb1b48',(res)=>{
+    console.log(res)
+})
+SendEther('2563D39BBCF84ED34132DE0E044841CD130F7A872E1785D82503772DF0B8143D','0x3b066c7967c36068aee603D956FE82B1b7af2Db1',1,(res)=>{
+    console.log(res)
+})
 ```
 
 ## User Guide
@@ -123,30 +131,30 @@ const FlexEther = require('flex-ether-fix');
 const PRIVATE_KEY = '0xb3734ec890893585330c71ece72afb05058192b6be47bee2b99714e6bb5696ab';
 const eth = new FlexEther();
 
-// Send 100 wei to an ENS address and wait for the receipt.
-let receipt = await eth.transfer('ethereum.eth', '100');
+// Send 1 ether to an ENS address and wait for the receipt.
+let receipt = await eth.transfer('ethereum.eth', 1);
 /* Result: <Receipt Object> {
    transactionHash: '0x9eb3f89f8581e6c6df294344b538d44e265c226ae6e8ce6210df497cf2b54bd3',
    blockNumber: 3616104,
    gasUsed: 21000,
    ... etc.
 }*/
-// Send 100 wei to an address and wait for the transaction hash.
+// Send 1 ether to an address and wait for the transaction hash.
 let txId = await eth.transfer(
-   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', '100').txId;
-// Send 100 wei to an address and wait for the receipt after 3 confirmations.
+   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', 1).txId;
+// Send 1 ether to an address and wait for the receipt after 3 confirmations.
 receipt = await eth.transfer(
-   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', '100').confirmed(3);
-// Send 100 wei from a wallet managed by the provider and wait for the receipt
+   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', 1).confirmed(3);
+// Send 1 ether from a wallet managed by the provider and wait for the receipt
 receipt = await eth.transfer(
-   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', '100',
+   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', 1,
    {from: '0x005B68A967D39c497074127871297b6728a1cfEd'});
-// Send 100 wei from a wallet defined by a private key and wait for the receipt
+// Send 1 ether from a wallet defined by a private key and wait for the receipt
 receipt = await eth.transfer(
-   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', '100', {key: PRIVATE_KEY});
+   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', 1, {key: PRIVATE_KEY});
 // Same as above but with send().
 receipt = await eth.send(
-   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', {value: '100', key: PRIVATE_KEY});
+   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', {value: 1, key: PRIVATE_KEY});
 
 ```
 
@@ -206,12 +214,12 @@ confirmations have been seen, up to a maximum of 12 confirmations.
 const FlexEther = require('flex-ether-fix');
 const eth = new FlexEther();
 
-// Send 100 wei to an address and wait for the receipt.
+// Send 1 ether to an address and wait for the receipt.
 let receipt = await eth.transfer(
-   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', '100');
-// Send 100 wei to an address and get the promise object.
+   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', 1);
+// Send 1 ether to an address and get the promise object.
 let tx = eth.transfer(
-   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', '100');
+   '0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1', 1);
 // Wait on the transaction hash.
 let transactionHash = await tx.txId;
 // Wait on the receipt. Equivalent to `await tx`
@@ -258,13 +266,13 @@ const FlexEther = require('flex-ether-fix');
 const PRIVATE_KEY = '0xb3734ec890893585330c71ece72afb05058192b6be47bee2b99714e6bb5696ab';
 const eth = new FlexEther();
 
-// Get the gas consumed by sending 100 wei to an address from the default account.
+// Get the gas consumed by sending 1 ether to an address from the default account.
 let gas = await eth.estimateGas('0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1',
-   {value: '100'});
-// Get the gas consumed by sending 100 wei to an address from a wallet defined by
+   {value: 1});
+// Get the gas consumed by sending 1 ether to an address from a wallet defined by
 // a private key.
 let gas = await eth.estimateGas('0xf6fb5b73987d6d9a139e23bab97be6fc89e0dcd1',
-   {value: '100', key: PRIVATE_KEY});
+   {value: 1, key: PRIVATE_KEY});
 ```
 
 ### ENS addresses
